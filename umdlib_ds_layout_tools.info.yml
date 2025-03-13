@@ -1,0 +1,7 @@
+name: UMD Lib Layout Tools 
+description: Layout configs and other tools for UMDLib DS Layouts.
+
+package: 'UMDDS'
+type: module
+
+core_version_requirement: ^11

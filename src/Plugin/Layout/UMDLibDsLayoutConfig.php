@@ -95,7 +95,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
         ],
       ],
     ];
-    return $form;
+    return parent::buildConfigurationForm($form, $form_state);
   }
 
   /**
@@ -109,6 +109,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    parent::submitConfigurationForm($form, $form_state);
     $this->configuration['sidebar_region'] = $form_state->getValue('sidebar_region');
     $num_rows = $form_state->getValue('num_rows');
     $this->configuration['num_rows'] = $num_rows;

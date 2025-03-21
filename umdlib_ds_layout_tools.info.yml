@@ -5,3 +5,8 @@ package: 'UMDDS'
 type: module
 
 core_version_requirement: ^11
+
+dependencies:
+  - layout_builder_restrictions
+  - block_list_override
+  - layout_builder_lock

@@ -16,10 +16,16 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
     return parent::defaultConfiguration() + [
       'sidebar_region' => FALSE,
       'num_rows' => 1,
-      'row_one_cols' => 1,
-      'row_two_cols' => 0,
-      'row_three_cols' => 0,
-      'row_four_cols' => 0,
+      'row_1_cols' => 1,
+      'row_2_cols' => 0,
+      'row_3_cols' => 0,
+      'row_4_cols' => 0,
+      'row_5_cols' => 0,
+      'row_6_cols' => 0,
+      'row_7_cols' => 0,
+      'row_8_cols' => 0,
+      'row_9_cols' => 0,
+      'row_10_cols' => 0,
     ];
   }
 
@@ -31,11 +37,28 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
         $form_state = $form_state->getCompleteFormState();
     }
     $configuration = $this->getConfiguration();
+    $rows = [
+      1 => $this->t('One'),
+      2 => $this->t('Two'),
+      3 => $this->t('Three'),
+      4 => $this->t('Four'),
+      5 => $this->t('Five'),
+      6 => $this->t('Six'),
+      7 => $this->t('Seven'),
+      8 => $this->t('Eight'),
+      9 => $this->t('Nine'),
+      10 => $this->t('Ten'),
+    ];
     $options = [
       1 => $this->t('One'),
       2 => $this->t('Two'),
       3 => $this->t('Three'),
       4 => $this->t('Four'),
+    ];
+    $sizes = [
+      'default' => $this->t('Default'),
+      'large' => $this->t('Large'),
+      'small' => $this->t('Small')
     ];
     $form['sidebar_region'] = [
       '#type' => 'checkbox',
@@ -43,58 +66,47 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       '#default_value' => $configuration['sidebar_region'],
     ];
     $form['num_rows'] = [
-      '#type' => 'radios',
+      '#type' => 'select',
       '#title' => $this->t('Number of Rows'),
-      '#options' => $options,
+      '#options' => $rows,
       '#required' => TRUE,
       '#default_value' => $configuration['num_rows'],
     ];
-    $form['row_one_cols'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Row One Columns'),
-      '#options' => $options,
-      '#default_value' => $configuration['row_one_cols'],
-      '#required' => TRUE,
-    ];
-    $form['row_two_cols'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Row Two Columns'),
-      '#options' => $options,
-      '#default_value' => $configuration['row_two_cols'],
-      '#states' => [
-        'visible' => [
-          ':input[name="num_rows"]' =>
-            ['value' => 2], 'or',
-            ['value' => 3], 'or',
-            ['value' => 4],
-        ],
-      ],
-    ];
-    $form['row_three_cols'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Row Three Columns'),
-      '#options' => $options,
-      '#default_value' => $configuration['row_three_cols'],
-      '#states' => [
-        'visible' => [
-          ':input[name="num_rows"]' =>
-            ['value' => 3], 'or',
-            ['value' => 4],
-        ],
-      ],
-    ];
-    $form['row_four_cols'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Row Four Columns'),
-      '#options' => $options,
-      '#default_value' => $configuration['row_four_cols'],
-      '#states' => [
-        'visible' => [
-          ':input[name="num_rows"]' =>
-            ['value' => 4],
-        ],
-      ],
-    ];
+    $is_open_required = TRUE;
+    foreach ($rows as $key => $value) {
+      $machine_name = 'row_' . $key;
+      $friendly_name = $this->t('Row') . ' ' .  $value;
+      $form[$machine_name] = [
+        '#type' => 'details',
+        '#open' => $is_open_required,
+        '#title' => $friendly_name,
+      ];
+      $form[$machine_name][$machine_name . '_cols'] = [
+        '#type' => 'select',
+        '#title' => $friendly_name . ' ' . $this->t('Columns'),
+        '#options' => $options,
+        '#default_value' => !empty($configuration['column_config'][$machine_name]['cols']) ? 
+                             $configuration['column_config'][$machine_name]['cols'] : 1,
+        '#required' => $is_open_required,
+      ];
+      $form[$machine_name][$machine_name . '_horizontal'] = [
+        '#type' => 'select',
+        '#title' => $friendly_name . ' ' . $this->t('Horizontal Spacing'),
+        '#options' => $sizes,
+        '#default_value' => !empty($configuration['column_config'][$machine_name]['horizontal']) ? 
+                             $configuration['column_config'][$machine_name]['horizontal'] : 'default',
+        '#required' => $is_open_required,
+      ];
+      $form[$machine_name][$machine_name . '_vertical'] = [
+        '#type' => 'select',
+        '#title' => $friendly_name . ' ' . $this->t('Vertical Spacing'),
+        '#options' => $sizes,
+        '#default_value' => !empty($configuration['column_config'][$machine_name]['vertical']) ? 
+                             $configuration['column_config'][$machine_name]['vertical'] : 'default',
+        '#required' => $is_open_required,
+      ];
+      $is_open_required = FALSE;
+    }
     return parent::buildConfigurationForm($form, $form_state);
   }
 
@@ -110,35 +122,39 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
+    $rows = [
+      1 => $this->t('One'),
+      2 => $this->t('Two'),
+      3 => $this->t('Three'),
+      4 => $this->t('Four'),
+      5 => $this->t('Five'),
+      6 => $this->t('Six'),
+      7 => $this->t('Seven'),
+      8 => $this->t('Eight'),
+      9 => $this->t('Nine'),
+      10 => $this->t('Ten'),
+    ];
+    $vals = $form_state->getValues();
+
     $this->configuration['sidebar_region'] = $form_state->getValue('sidebar_region');
     $num_rows = $form_state->getValue('num_rows');
     $this->configuration['num_rows'] = $num_rows;
 
-    switch ($num_rows) {
-      case 1:
-        $this->configuration['row_one_cols'] = $form_state->getValue('row_one_cols');
-        $this->configuration['row_two_cols'] = 0;
-        $this->configuration['row_three_cols'] = 0;
-        $this->configuration['row_four_cols'] = 0;
-        break;
-      case 2:
-        $this->configuration['row_one_cols'] = $form_state->getValue('row_one_cols');
-        $this->configuration['row_two_cols'] = $form_state->getValue('row_two_cols');
-        $this->configuration['row_three_cols'] = 0;
-        $this->configuration['row_four_cols'] = 0;
-        break;
-      case 3:
-        $this->configuration['row_one_cols'] = $form_state->getValue('row_one_cols');
-        $this->configuration['row_two_cols'] = $form_state->getValue('row_two_cols');
-        $this->configuration['row_three_cols'] = $form_state->getValue('row_three_cols');
-        $this->configuration['row_four_cols'] = 0;
-        break;
-      case 4:
-        $this->configuration['row_one_cols'] = $form_state->getValue('row_one_cols');
-        $this->configuration['row_two_cols'] = $form_state->getValue('row_two_cols');
-        $this->configuration['row_three_cols'] = $form_state->getValue('row_three_cols');
-        $this->configuration['row_four_cols'] = $form_state->getValue('row_four_cols');
-        break;
-    } 
+    $column_info = [];
+    $i = 1;
+    foreach ($rows as $key => $value) {
+      $machine_name = 'row_' . $key;
+      $row_cols = 0;
+      if ($i <= $num_rows) {
+        $row_cols = $vals[$machine_name][$machine_name . '_cols'];
+      }
+      // $this->configuration[$machine_name . '_cols'] = $row_cols;
+      $column_info[$machine_name]['cols'] = $row_cols;
+      $column_info[$machine_name]['horizontal'] = $vals[$machine_name][$machine_name . '_horizontal'];
+      $column_info[$machine_name]['vertical'] = $vals[$machine_name][$machine_name . '_vertical'];
+      $i++;
+    }
+    $this->configuration['column_config'] = $column_info;
+    \Drupal::logger('layouts')->info(json_encode($vals));
   }
 }

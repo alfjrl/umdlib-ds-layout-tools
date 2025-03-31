@@ -64,19 +64,19 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
     $form['sidebar_region'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Add Sidebar Region'),
-      '#default_value' => $configuration['sidebar_region'],
+      '#default_value' => !empty($configuration['sidebar_region']) ? $configuration['sidebar_region'] : NULL,
     ];
     $form['section_width'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Full Page Width'),
-       '#default_value' => $configuration['section_width'],
+       '#default_value' => !empty($configuration['section_width']) ? $configuration['section_width'] : NULL,
     ];
     $form['num_rows'] = [
       '#type' => 'select',
       '#title' => $this->t('Number of Rows'),
       '#options' => $rows,
       '#required' => TRUE,
-      '#default_value' => $configuration['num_rows'],
+      '#default_value' => !empty($configuration['num_rows']) ? $configuration['num_rows'] : 1,
     ];
     $is_open_required = TRUE;
     foreach ($rows as $key => $value) {

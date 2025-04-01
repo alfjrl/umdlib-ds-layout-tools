@@ -16,6 +16,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
     return parent::defaultConfiguration() + [
       'sidebar_region' => FALSE,
       'section_width' => FALSE,
+      'section_vertical_spacing' => 'default',
       'num_rows' => 1,
       'row_1_cols' => 1,
       'row_2_cols' => 0,
@@ -79,6 +80,13 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       ],
       '#default_value' => !empty($configuration['section_width']) ? $configuration['section_width'] : FALSE,
     ];
+    $form['section_vertical_spacing'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Section Vertical Spacing'),
+      '#options' => $sizes,
+      '#required' => TRUE,
+      '#default_value' => $configuration['section_vertical_spacing'],
+    ];
     $form['num_rows'] = [
       '#type' => 'select',
       '#title' => $this->t('Number of Rows'),
@@ -86,7 +94,6 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       '#required' => TRUE,
       '#default_value' => !empty($configuration['num_rows']) ? $configuration['num_rows'] : 1,
     ];
-
     $is_open_required = TRUE;
     foreach ($rows as $key => $value) {
       $machine_name = 'row_' . $key;
@@ -156,6 +163,9 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       10 => $this->t('Ten'),
     ];
     $vals = $form_state->getValues();
+
+    $section_vertical_spacing = $form_state->getValue('section_vertical_spacing');
+    $this->configuration['section_vertical_spacing'] = $section_vertical_spacing;
 
     $sidebar_region = $form_state->getValue('sidebar_region'); 
 

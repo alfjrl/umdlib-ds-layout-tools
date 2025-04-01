@@ -35,9 +35,6 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    if ($form_state instanceof SubformStateInterface) {
-        # $form_state = $form_state->getCompleteFormState();
-    }
     $configuration = $this->getConfiguration();
     $rows = [
       1 => $this->t('One'),
@@ -85,7 +82,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       '#title' => $this->t('Section Vertical Spacing'),
       '#options' => $sizes,
       '#required' => TRUE,
-      '#default_value' => $configuration['section_vertical_spacing'],
+      '#default_value' => !empty($configuration['section_vertical_spacing']) ? $configuration['section_vertical_spacing'] : 'default',
     ];
     $form['num_rows'] = [
       '#type' => 'select',

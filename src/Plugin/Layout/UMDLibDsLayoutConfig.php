@@ -165,12 +165,17 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
     ];
     $vals = $form_state->getValues();
 
-    $this->configuration['sidebar_region'] = $form_state->getValue('sidebar_region');
-    $this->configuration['section_width'] = $form_state->getValue('section_width');
-
     $section_vertical_spacing = $form_state->getValue('section_vertical_spacing');
     $this->configuration['section_vertical_spacing'] = $section_vertical_spacing;
 
+    $sidebar_region = $form_state->getValue('sidebar_region'); 
+
+    $this->configuration['sidebar_region'] = $sidebar_region;
+    if (!empty($sidebar_region)) {
+      $this->configuration['section_width'] = FALSE;
+    } else {
+      $this->configuration['section_width'] = $form_state->getValue('section_width');
+    }
     $num_rows = $form_state->getValue('num_rows');
     $this->configuration['num_rows'] = $num_rows;
 

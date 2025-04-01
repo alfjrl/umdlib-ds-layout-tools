@@ -35,7 +35,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     if ($form_state instanceof SubformStateInterface) {
-        $form_state = $form_state->getCompleteFormState();
+        # $form_state = $form_state->getCompleteFormState();
     }
     $configuration = $this->getConfiguration();
     $rows = [
@@ -61,15 +61,23 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       'large' => $this->t('Large'),
       'small' => $this->t('Small')
     ];
+
+    $form['#attached']['library'][] = 'umdlib_ds_layout_tools/webform.forked';
+
     $form['sidebar_region'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Add Sidebar Region'),
-      '#default_value' => !empty($configuration['sidebar_region']) ? $configuration['sidebar_region'] : NULL,
+      '#default_value' => !empty($configuration['sidebar_region']) ? $configuration['sidebar_region'] : FALSE,
     ];
     $form['section_width'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Full Page Width'),
-       '#default_value' => !empty($configuration['section_width']) ? $configuration['section_width'] : NULL,
+      '#states' => [
+        'disabled' => [
+          ':input[name="layout_settings[sidebar_region]"]' => ['checked' => TRUE],
+        ]
+      ],
+      '#default_value' => !empty($configuration['section_width']) ? $configuration['section_width'] : FALSE,
     ];
     $form['num_rows'] = [
       '#type' => 'select',
@@ -78,6 +86,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       '#required' => TRUE,
       '#default_value' => !empty($configuration['num_rows']) ? $configuration['num_rows'] : 1,
     ];
+
     $is_open_required = TRUE;
     foreach ($rows as $key => $value) {
       $machine_name = 'row_' . $key;
@@ -86,6 +95,11 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
         '#type' => 'details',
         '#open' => $is_open_required,
         '#title' => $friendly_name,
+        '#states' => [
+          'visible' => [
+            ':input[name="layout_settings[num_rows]"]' => ['value' => ['greater_equal' => $key ]],
+          ],
+        ],
       ];
       $form[$machine_name][$machine_name . '_cols'] = [
         '#type' => 'select',
@@ -113,6 +127,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       ];
       $is_open_required = FALSE;
     }
+
     return parent::buildConfigurationForm($form, $form_state);
   }
 

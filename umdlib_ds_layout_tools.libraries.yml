@@ -1,0 +1,5 @@
+webform.forked:
+  js:
+    js/webform.forked.js: {}
+  dependencies:
+  - core/drupal.states

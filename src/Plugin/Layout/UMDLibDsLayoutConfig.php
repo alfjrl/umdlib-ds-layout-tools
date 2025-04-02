@@ -59,6 +59,10 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       'large' => $this->t('Large'),
       'small' => $this->t('Small')
     ];
+    $spacing = [
+      'default' => $this->t('Default'),
+      'none' => $this->t('None'),
+    ];
 
     $form['#attached']['library'][] = 'umdlib_ds_layout_tools/webform.forked';
 
@@ -105,6 +109,12 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
           ],
         ],
       ];
+      $form[$machine_name]['card_group'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Card Group'),
+        '#default_value' => !empty($configuration['column_config'][$machine_name]['card_group']) ? 
+                 $configuration['column_config'][$machine_name]['card_group'] : FALSE,
+      ];
       $form[$machine_name][$machine_name . '_cols'] = [
         '#type' => 'select',
         '#title' => $friendly_name . ' ' . $this->t('Columns'),
@@ -115,8 +125,8 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       ];
       $form[$machine_name][$machine_name . '_horizontal'] = [
         '#type' => 'select',
-        '#title' => $friendly_name . ' ' . $this->t('Horizontal Spacing'),
-        '#options' => $sizes,
+        '#title' => $friendly_name . ' ' . $this->t('Column Spacing'),
+        '#options' => $spacing,
         '#default_value' => !empty($configuration['column_config'][$machine_name]['horizontal']) ? 
                              $configuration['column_config'][$machine_name]['horizontal'] : 'default',
         '#required' => $is_open_required,
@@ -184,6 +194,8 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
         $row_cols = $vals[$machine_name][$machine_name . '_cols'];
       }
       // $this->configuration[$machine_name . '_cols'] = $row_cols;
+      $column_info[$machine_name]['card_group'] = !empty($vals[$machine_name]['card_group']) ? 
+        (bool) $vals[$machine_name]['card_group'] : FALSE;
       $column_info[$machine_name]['cols'] = $row_cols;
       $column_info[$machine_name]['horizontal'] = $vals[$machine_name][$machine_name . '_horizontal'];
       $column_info[$machine_name]['vertical'] = $vals[$machine_name][$machine_name . '_vertical'];

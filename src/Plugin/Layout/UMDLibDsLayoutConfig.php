@@ -16,6 +16,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
     return parent::defaultConfiguration() + [
       'sidebar_region' => FALSE,
       'section_width' => FALSE,
+      'top_margin' => FALSE,
       'section_vertical_spacing' => 'default',
       'num_rows' => 1,
       'row_1_cols' => 1,
@@ -57,10 +58,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
     $sizes = [
       'default' => $this->t('Default'),
       'large' => $this->t('Large'),
-      'small' => $this->t('Small')
-    ];
-    $spacing = [
-      'default' => $this->t('Default'),
+      'small' => $this->t('Small'),
       'none' => $this->t('None'),
     ];
 
@@ -68,12 +66,13 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
 
     $form['sidebar_region'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Add Sidebar Region'),
+      '#title' => $this->t('Enable sidebar region'),
       '#default_value' => !empty($configuration['sidebar_region']) ? $configuration['sidebar_region'] : FALSE,
     ];
+
     $form['section_width'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Full Page Width'),
+      '#title' => $this->t('Use full page width'),
       '#states' => [
         'disabled' => [
           ':input[name="layout_settings[sidebar_region]"]' => ['checked' => TRUE],
@@ -81,13 +80,21 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       ],
       '#default_value' => !empty($configuration['section_width']) ? $configuration['section_width'] : FALSE,
     ];
+
+    $form['top_margin'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Add top margin (no hero)'),
+      '#default_value' => !empty($configuration['top_margin']) ? $configuration['top_margin'] : FALSE,
+    ];
+
     $form['section_vertical_spacing'] = [
       '#type' => 'select',
-      '#title' => $this->t('Section Vertical Spacing'),
+      '#title' => $this->t('Spacing between Sections'),
       '#options' => $sizes,
       '#required' => TRUE,
       '#default_value' => !empty($configuration['section_vertical_spacing']) ? $configuration['section_vertical_spacing'] : 'default',
     ];
+
     $form['num_rows'] = [
       '#type' => 'select',
       '#title' => $this->t('Number of Rows'),
@@ -95,6 +102,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       '#required' => TRUE,
       '#default_value' => !empty($configuration['num_rows']) ? $configuration['num_rows'] : 1,
     ];
+
     $is_open_required = TRUE;
     foreach ($rows as $key => $value) {
       $machine_name = 'row_' . $key;
@@ -111,7 +119,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       ];
       $form[$machine_name]['card_group'] = [
         '#type' => 'checkbox',
-        '#title' => $this->t('Card Group'),
+        '#title' => $this->t('Arrange as card group'),
         '#default_value' => !empty($configuration['column_config'][$machine_name]['card_group']) ? 
                  $configuration['column_config'][$machine_name]['card_group'] : FALSE,
       ];
@@ -125,15 +133,17 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       ];
       $form[$machine_name][$machine_name . '_horizontal'] = [
         '#type' => 'select',
-        '#title' => $friendly_name . ' ' . $this->t('Column Spacing'),
-        '#options' => $spacing,
+        '#title' => $this->t('Column Spacing'),
+        '#options' => array_filter($sizes, function ($key) {
+        return in_array($key, ['default', 'none']); // Only show 'default' and 'large'
+      }, ARRAY_FILTER_USE_KEY),
         '#default_value' => !empty($configuration['column_config'][$machine_name]['horizontal']) ? 
                              $configuration['column_config'][$machine_name]['horizontal'] : 'default',
         '#required' => $is_open_required,
       ];
       $form[$machine_name][$machine_name . '_vertical'] = [
         '#type' => 'select',
-        '#title' => $friendly_name . ' ' . $this->t('Vertical Spacing'),
+        '#title' => $this->t('Row Spacing'),
         '#options' => $sizes,
         '#default_value' => !empty($configuration['column_config'][$machine_name]['vertical']) ? 
                              $configuration['column_config'][$machine_name]['vertical'] : 'default',
@@ -183,6 +193,10 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
       $this->configuration['section_width'] = $form_state->getValue('section_width');
     }
     $num_rows = $form_state->getValue('num_rows');
+
+    $top_margin = $form_state->getValue('top_margin');
+    $this->configuration['top_margin'] = $top_margin;
+
     $this->configuration['num_rows'] = $num_rows;
 
     $column_info = [];

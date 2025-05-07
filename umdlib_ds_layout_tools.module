@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Module file for layout tools module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for layout_builder_add_block.
+ *
+ * @TODO: Keep an eye on https://www.drupal.org/project/drupal/issues/3074435
+ */
+function umdlib_ds_layout_tools_form_layout_builder_add_block_alter(&$form, FormStateInterface $form_state) {
+  if (isset($form['settings']['label_display'])) {
+    // Uncheck the 'display title' checkbox by default.
+    $form['settings']['label_display']['#default_value'] = FALSE;
+  }
+}
+

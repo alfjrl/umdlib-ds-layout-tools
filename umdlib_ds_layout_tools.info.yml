@@ -1,12 +1,14 @@
-name: UMD Lib Layout Tools 
+name: UMD Lib Layout Tools
 description: Layout configs and other tools for UMDLib DS Layouts.
 
 package: 'UMDDS'
 type: module
 
 core_version_requirement: ^11
+version: 1.0.0
 
 dependencies:
-  - layout_builder_restrictions
-  - block_list_override
-  - layout_builder_lock
+- layout_builder_restrictions
+- block_list_override
+- layout_builder_lock
+- ui_patterns_blocks

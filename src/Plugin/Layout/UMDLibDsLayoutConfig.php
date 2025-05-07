@@ -208,8 +208,7 @@ class UMDLibDsLayoutConfig extends LayoutDefault implements PluginFormInterface 
         $row_cols = $vals[$machine_name][$machine_name . '_cols'];
       }
       // $this->configuration[$machine_name . '_cols'] = $row_cols;
-      $column_info[$machine_name]['card_group'] = !empty($vals[$machine_name]['card_group']) ? 
-        (bool) $vals[$machine_name]['card_group'] : FALSE;
+      $column_info[$machine_name]['card_group'] = !empty($vals[$machine_name]['card_group']) ? (bool) $vals[$machine_name]['card_group'] : FALSE;
       $column_info[$machine_name]['cols'] = $row_cols;
       $column_info[$machine_name]['horizontal'] = $vals[$machine_name][$machine_name . '_horizontal'];
       $column_info[$machine_name]['vertical'] = $vals[$machine_name][$machine_name . '_vertical'];

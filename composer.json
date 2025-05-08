@@ -1,0 +1,18 @@
+{
+    "name": "umd-lib/umdlib_ds_layout_tools",
+    "description": "Extends layout functionality and configurations for Library DS sites.",
+    "type": "drupal-module",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "UMD Libraries"
+        }
+    ],
+    "require": {
+        "drupal/layout_builder_restrictions": "^3",
+        "drupal/block_list_override": "^1",
+        "drupal/layout_builder_lock": "^2.0@RC",
+        "drupal/ui_patterns": "^2.0"
+      },
+    "minimum-stability": "dev"
+}

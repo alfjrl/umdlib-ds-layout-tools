@@ -11,8 +11,8 @@
     "require": {
         "drupal/layout_builder_restrictions": "^3",
         "drupal/block_list_override": "^1",
-        "drupal/layout_builder_lock": "^2.0@RC",
-        "drupal/ui_patterns": "^2.0"
+        "drupal/layout_builder_lock": "^2",
+        "drupal/ui_patterns": "^2"
       },
     "minimum-stability": "beta"
 }

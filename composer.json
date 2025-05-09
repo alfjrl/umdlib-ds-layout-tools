@@ -14,5 +14,5 @@
         "drupal/layout_builder_lock": "^2.0@RC",
         "drupal/ui_patterns": "^2.0"
       },
-    "minimum-stability": "dev"
+    "minimum-stability": "beta"
 }

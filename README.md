@@ -6,6 +6,14 @@ It has no utility outside of this context.
 
 Use it to extend layout functionality and configurations for Library DS sites.
 
+## Installation
+
+Clone this repo into your themes or install with composer:
+
+```bash
+composer require umd-lib/umdlib-design-system-theme
+```
+
 ## Dependencies
 
 This module depends on the following:

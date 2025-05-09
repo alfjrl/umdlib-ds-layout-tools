@@ -10,5 +10,4 @@ version: 1.0.0
 dependencies:
 - layout_builder_restrictions
 - block_list_override
-- layout_builder_lock
 - ui_patterns_blocks

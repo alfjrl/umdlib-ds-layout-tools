@@ -11,8 +11,10 @@
     "require": {
         "drupal/layout_builder_restrictions": "^3",
         "drupal/block_list_override": "^1",
-        "drupal/layout_builder_lock": "^2",
         "drupal/ui_patterns": "^2"
       },
+    "suggest": {
+        "drupal/layout_builder_lock": "Lock blocks to regions"
+    },
     "minimum-stability": "beta"
 }
